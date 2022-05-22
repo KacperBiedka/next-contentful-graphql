@@ -1,6 +1,13 @@
 // tailwind.config.js
 const colors = require("tailwindcss/colors");
 
+// Remove deprecated colors
+delete colors["lightBlue"];
+delete colors["warmGray"];
+delete colors["trueGray"];
+delete colors["coolGray"];
+delete colors["blueGray"];
+
 module.exports = {
   theme: {
     colors: {

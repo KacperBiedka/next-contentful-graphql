@@ -17,7 +17,16 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
       <Content>{children}</Content>
 
       <Footer>
-        <p>Made with love by Kacper Biedka 💙</p>
+        <p>
+          Made with love by{" "}
+          <a
+            rel="noreferrer"
+            target="_blank"
+            href="https://github.com/KacperBiedka"
+          >
+            Kacper Biedka 💙
+          </a>
+        </p>
       </Footer>
     </Wrapper>
   );
@@ -32,11 +41,11 @@ const Header = tw.a`
 `;
 
 const Heading = tw.h1`
-    text-4xl m-0 font-sans my-5 mx-5
+    text-4xl m-0 font-sans mt-5 mx-5
 `;
 
 const Content = tw.div`
-    md:mt-5 mb-10 mx-auto max-w-7xl w-full h-full p-5
+    mb-5 mx-auto max-w-7xl w-full h-full p-5
 `;
 
 const Footer = tw.footer`

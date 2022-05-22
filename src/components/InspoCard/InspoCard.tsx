@@ -18,7 +18,6 @@ export const InspoCard: FC<InspoCardProps> = ({ inspo }) => {
       <Featured>
         <Image
           src={`https:${thumbnail.fields.file.url}`}
-          height={280}
           object-fit="cover"
           alt={thumbnail.fields.title}
           layout="fill"
@@ -47,7 +46,7 @@ const Featured = tw.div`
 const Content = tw.div``;
 
 const Title = tw.h4`
-  m-0 text-2xl p-5 pb-2.5
+  m-0 text-2xl p-5 pb-0
 `;
 
 const Actions = tw.div`
