@@ -8,11 +8,13 @@
     "build": "next build",
     "export": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "contentful-typescript-codegen --output src/schema/generated/contentful.d.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "contentful": "^9.1.29",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
@@ -26,8 +28,12 @@
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.4",
     "babel-plugin-macros": "^3.1.0",
+    "contentful-management": "^10.6.0",
+    "contentful-typescript-codegen": "^3.2.3",
+    "dotenv": "^16.0.1",
     "eslint": "8.16.0",
     "eslint-config-next": "12.1.6",
+    "prettier": "^2.6.2",
     "typescript": "4.6.4"
   },
   "babelMacros": {

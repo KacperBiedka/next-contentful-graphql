@@ -9,8 +9,7 @@ const DefaultLayout = ({ children }: { children: ReactNode }) => {
       <header>
         <Link href="/">
           <Header>
-            <Preheading>DROP IN</Preheading>
-            <Heading>YOUR STuff</Heading>
+            <Heading>Inspos</Heading>
           </Header>
         </Link>
       </header>
@@ -29,15 +28,11 @@ const Wrapper = tw.div`
 `;
 
 const Header = tw.a`
-   flex flex-col mt-10 p-5 uppercase text-center bg-slate-900 max-w-xs self-center mx-auto text-white
-`;
-
-const Preheading = tw.p`
-    text-2xl m-0 font-sans
+    cursor-pointer
 `;
 
 const Heading = tw.h1`
-    text-4xl m-0 font-sans
+    text-4xl m-0 font-sans m-5
 `;
 
 const Content = tw.div`
@@ -45,7 +40,7 @@ const Content = tw.div`
 `;
 
 const Footer = tw.footer`
-    bg-slate-800 px-6 py-8 text-slate-500 mt-auto text-center
+    bg-slate-900 p-2 text-slate-500 mt-auto text-center
 `;
 
 export default DefaultLayout;
