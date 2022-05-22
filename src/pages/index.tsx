@@ -5,6 +5,8 @@ import { createClient } from "contentful";
 
 import type { IInspoFields } from "schema/generated/contentful";
 
+import { InspoCard } from "components";
+
 type InspoItems = Array<Entry<IInspoFields>>;
 
 export const getStaticProps = async () => {
@@ -23,20 +25,17 @@ export const getStaticProps = async () => {
 };
 
 const Home: NextPage<{ inspos: InspoItems }> = ({ inspos }) => {
-  console.log(inspos);
   return (
     <Wrapper>
-      <Header>Content will come here ✨</Header>
-      {inspos[0].fields.title}
+      {inspos.map((inspo) => (
+        <InspoCard key={inspo.sys.id} inspo={inspo} />
+      ))}
     </Wrapper>
   );
 };
 
 const Wrapper = tw.div`
-  flex p-4 h-full w-full
-`;
-
-const Header = tw.h1`
+  grid h-full w-full grid-cols-1 gap-10 md:grid-cols-2
 `;
 
 export default Home;

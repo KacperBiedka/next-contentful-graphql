@@ -32,11 +32,11 @@ const Header = tw.a`
 `;
 
 const Heading = tw.h1`
-    text-4xl m-0 font-sans m-5
+    text-4xl m-0 font-sans my-5 mx-5
 `;
 
 const Content = tw.div`
-    my-5 mx-auto max-w-7xl w-full h-full
+    md:mt-5 mb-10 mx-auto max-w-7xl w-full h-full p-5
 `;
 
 const Footer = tw.footer`
