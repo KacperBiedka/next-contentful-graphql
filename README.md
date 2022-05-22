@@ -1,6 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Inspos
 
-## Getting Started
+Next, Tailwind & Contentful app bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+Add elements that inspire you in a form of a data model in Contentful and see them in a clean Tailwind UI with a blazing fast loading time thanks to the Next.js server side logic ✨
+
+## Setup ⚙
+
+Project uses [Yarn](//yarnpkg.com/) as a front-end dependency manager. Make sure your development machine has installed following dependencies:
+
+- [Node](//nodejs.org/)
+- [Yarn](//yarnpkg.com/)
+
+When this is ready, start with cloning the repository to the current working directory.
+
+```bash
+# Clones project to the `next-contentful-poc` directory
+$ git clone https://github.com/KacperBiedka/next-contentful-poc.git
+```
+
+To properly bootstrap project, you have to fetch some required dependencies and generate its assets. Before that, make sure that you are in the root folder where package.json file is located. Then simply run yarn's installation command.
+
+```bash
+# Installs all project dependencies.
+$ yarn install
+```
+
+## Development 👨‍💻
 
 First, run the development server:
 
@@ -14,21 +39,23 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Building 🏗
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+In order to generate static files that are production-ready, you need to build and export the project
 
-## Learn More
+```bash
+# Outputs static `.html` files and website assets to the `out/` directory.
+$ yarn export
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Reasoning behind this project 💡
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I've came up with the idea for this project to learn Tailwind & Contentful integration with Next. This example incorporates path generation based on slugs coming from the Contentful data model.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+It also poses a challenge in a form of integrating the Contentful models with proper Typescript support (I've used a nifty codegen to acheive that automatically).
 
-## Deploy on Vercel
+Possible improvement: Include schema codegen in CI instead of including the files in the repo :)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Vercel 🔼
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project has been deployed on he [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme). The environment keys used by the deployment has also been setup there.
