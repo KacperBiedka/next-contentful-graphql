@@ -1,6 +1,9 @@
 import type { GetStaticProps } from "next";
+import Image from "next/image";
 import { createClient } from "contentful";
 import type { EntryCollection, Entry } from "contentful";
+import tw from "twin.macro";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
 import { IInspoFields } from "schema/generated/contentful";
 
@@ -42,6 +45,42 @@ export default function InspoDetails({
 }: {
   inspo: Entry<IInspoFields>;
 }) {
-  console.log(inspo);
-  return <div>Inspo Details</div>;
+  const { featuredImage, title, description, tags } = inspo.fields;
+
+  return (
+    <Banner>
+      <Image
+        src={`https:${featuredImage.fields.file.url}`}
+        width={featuredImage.fields.file.details.image?.width || "auto"}
+        height={featuredImage.fields.file.details.image?.height || 200}
+        layout="responsive"
+        alt={inspo.fields.title}
+      />
+      <Title>{title}</Title>
+      <Info>
+        {tags.map((tag) => (
+          <Tag key={tag}>{tag}</Tag>
+        ))}
+      </Info>
+      <Content>{documentToReactComponents(description)}</Content>
+    </Banner>
+  );
 }
+
+const Banner = tw.div`
+
+`;
+
+const Title = tw.h2`
+
+`;
+
+const Info = tw.div`
+
+`;
+
+const Tag = tw.span`
+
+`;
+
+const Content = tw.p``;

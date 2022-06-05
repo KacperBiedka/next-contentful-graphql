@@ -12,6 +12,7 @@
     "codegen": "contentful-typescript-codegen --output src/schema/generated/contentful.d.ts"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^15.12.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "contentful": "^9.1.29",
