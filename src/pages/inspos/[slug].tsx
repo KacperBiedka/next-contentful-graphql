@@ -6,6 +6,7 @@ import tw from "twin.macro";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
 import { IInspoFields } from "schema/generated/contentful";
+import { Skeleton } from "components";
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || "",
@@ -23,7 +24,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
@@ -46,6 +47,10 @@ export default function InspoDetails({
 }: {
   inspo: Entry<IInspoFields>;
 }) {
+  if (true) {
+    return <Skeleton />;
+  }
+
   const { featuredImage, title, description, tags } = inspo.fields;
 
   return (
