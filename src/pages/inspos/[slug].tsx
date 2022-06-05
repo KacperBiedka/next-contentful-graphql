@@ -68,19 +68,19 @@ export default function InspoDetails({
 }
 
 const Banner = tw.div`
-
+  pb-5
 `;
 
 const Title = tw.h2`
-
+  text-3xl
 `;
 
 const Info = tw.div`
-
+  flex gap-3
 `;
 
 const Tag = tw.span`
-
+  py-2 px-5 bg-slate-200 rounded-sm
 `;
 
 const Content = tw.p``;
