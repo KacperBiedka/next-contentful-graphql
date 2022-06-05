@@ -47,7 +47,7 @@ export default function InspoDetails({
 }: {
   inspo: Entry<IInspoFields>;
 }) {
-  if (true) {
+  if (!inspo) {
     return <Skeleton />;
   }
 
