@@ -21,6 +21,7 @@ export const getStaticProps = async () => {
     props: {
       inspos: res.items,
     },
+    revalidate: 1,
   };
 };
 

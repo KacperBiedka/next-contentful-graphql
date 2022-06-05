@@ -37,6 +37,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       inspo: items[0],
     },
+    revalidate: 1,
   };
 };
 
