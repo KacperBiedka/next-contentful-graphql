@@ -1,25 +1,43 @@
-import type { GetStaticProps } from "next";
 import Image from "next/image";
-import { createClient } from "contentful";
-import type { EntryCollection, Entry } from "contentful";
 import tw from "twin.macro";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
-import { IInspoFields } from "schema/generated/contentful";
 import { Skeleton } from "components";
-
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || "",
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
-});
+import { Inspo } from "schema/generated/schema";
 
 export const getStaticPaths = async () => {
-  const res: EntryCollection<IInspoFields> = await client.getEntries({
-    content_type: "inspo",
-  });
+  const result = await fetch(
+    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+            inspoCollection {
+              items {
+                slug
+              }
+            }
+          }
+        `,
+      }),
+    }
+  );
 
-  const paths = res.items.map((item) => {
-    return { params: { slug: item.fields.slug } };
+  if (!result.ok) {
+    console.error(result);
+    return {};
+  }
+
+  const { data } = await result.json();
+  const inspoSlugs: Array<Inspo> = data.inspoCollection.items;
+
+  const paths = inspoSlugs.map(({ slug }) => {
+    return { params: { slug: slug || "" } };
   });
 
   return {
@@ -28,56 +46,84 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { items } = await client.getEntries({
-    content_type: "inspo",
-    "fields.slug": params?.slug,
-  });
-
-  if (!items.length) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      inspo: items[0],
-    },
-    revalidate: 1,
+type Params = {
+  params: {
+    slug: string;
   };
 };
 
-export default function InspoDetails({
-  inspo,
-}: {
-  inspo: Entry<IInspoFields>;
-}) {
+export const getStaticProps = async ({ params }: Params) => {
+  const result = await fetch(
+    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          query GetInspo($slug: String!) {
+            inspoCollection (where: {
+              slug: $slug
+            }) {
+              items {
+                title
+                description {
+                  json
+                }
+                tags
+                featuredImage {
+                  title
+                  url
+                  width
+                  height
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          slug: params?.slug,
+        },
+      }),
+    }
+  );
+
+  if (!result.ok) {
+    console.error(result);
+    return {};
+  }
+
+  const { data } = await result.json();
+  const inspoData: Inspo = data.inspoCollection.items[0] || {};
+
+  return {
+    props: {
+      inspo: inspoData,
+    },
+  };
+};
+
+export default function InspoDetails({ inspo }: { inspo: Inspo }) {
   if (!inspo) {
     return <Skeleton />;
   }
 
-  const { featuredImage, title, description, tags } = inspo.fields;
+  const { featuredImage, title, description, tags } = inspo;
 
   return (
     <Banner>
       <Image
-        src={`https:${featuredImage.fields.file.url}`}
-        width={featuredImage.fields.file.details.image?.width || "auto"}
-        height={featuredImage.fields.file.details.image?.height || 200}
+        src={`${featuredImage?.url}`}
+        width={featuredImage?.width || "auto"}
+        height={featuredImage?.height || 200}
         layout="responsive"
-        alt={inspo.fields.title}
+        alt={inspo.title || ""}
       />
       <Title>{title}</Title>
-      <Info>
-        {tags.map((tag) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
-      </Info>
-      <Content>{documentToReactComponents(description)}</Content>
+      <Info>{tags && tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}</Info>
+      <Content>{documentToReactComponents(description?.json)}</Content>
     </Banner>
   );
 }

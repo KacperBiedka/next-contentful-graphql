@@ -1,31 +1,57 @@
 import type { NextPage } from "next";
 import tw from "twin.macro";
-import type { Entry } from "contentful";
-import { createClient } from "contentful";
-
-import type { IInspoFields } from "schema/generated/contentful";
 
 import { InspoCard } from "components";
-
-type InspoItems = Array<Entry<IInspoFields>>;
+import type { Inspo } from "schema/generated/schema";
 
 export const getStaticProps = async () => {
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID || "",
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
-  });
+  const result = await fetch(
+    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+            inspoCollection {
+              items {
+                title
+                slug
+                thumbnail {
+                  title
+                  url
+                }
+                sys {
+                  id
+                }
+              }
+            }
+          }
+        `,
+      }),
+    }
+  );
 
-  const res = await client.getEntries({ content_type: "inspo" });
+  if (!result.ok) {
+    console.error(result);
+    return {};
+  }
+
+  const { data } = await result.json();
+  const inspos: Array<Inspo> = data.inspoCollection.items;
 
   return {
     props: {
-      inspos: res.items,
+      inspos,
     },
     revalidate: 1,
   };
 };
 
-const Home: NextPage<{ inspos: InspoItems }> = ({ inspos }) => {
+const Home: NextPage<{ inspos: Array<Inspo> }> = ({ inspos }) => {
   return (
     <Wrapper>
       {inspos.map((inspo) => (

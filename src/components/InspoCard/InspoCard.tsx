@@ -1,25 +1,24 @@
 import type { FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import type { Entry } from "contentful";
 
-import type { IInspoFields } from "schema/generated/contentful";
+import type { Inspo } from "schema/generated/schema";
 
 import tw from "twin.macro";
 
 export interface InspoCardProps {
-  inspo: Entry<IInspoFields>;
+  inspo: Inspo;
 }
 
 export const InspoCard: FC<InspoCardProps> = ({ inspo }) => {
-  const { title, slug, thumbnail } = inspo.fields;
+  const { title, slug, thumbnail } = inspo;
   return (
     <Wrapper>
       <Featured>
         <Image
-          src={`https:${thumbnail.fields.file.url}`}
+          src={thumbnail?.url || ""}
           object-fit="cover"
-          alt={thumbnail.fields.title}
+          alt={thumbnail?.title || ""}
           layout="fill"
         />
       </Featured>
