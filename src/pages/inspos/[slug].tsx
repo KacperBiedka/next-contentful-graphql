@@ -1,39 +1,32 @@
 import Image from "next/image";
 import tw from "twin.macro";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { gql } from "@apollo/client";
 
+import client from "lib/apolloClient";
 import { Skeleton } from "components";
 import { Inspo } from "schema/generated/schema";
 
-export const getStaticPaths = async () => {
-  const result = await fetch(
-    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-          query {
-            inspoCollection {
-              items {
-                slug
-              }
-            }
-          }
-        `,
-      }),
+const GET_INSPO_SLUGS = gql`
+  query {
+    inspoCollection {
+      items {
+        slug
+      }
     }
-  );
+  }
+`;
 
-  if (!result.ok) {
-    console.error(result);
+export const getStaticPaths = async () => {
+  const { data, error } = await client.query({
+    query: GET_INSPO_SLUGS,
+  });
+
+  if (error) {
+    console.error(error);
     return {};
   }
 
-  const { data } = await result.json();
   const inspoSlugs: Array<Inspo> = data.inspoCollection.items;
 
   const paths = inspoSlugs.map(({ slug }) => {
@@ -52,50 +45,39 @@ type Params = {
   };
 };
 
-export const getStaticProps = async ({ params }: Params) => {
-  const result = await fetch(
-    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-          query GetInspo($slug: String!) {
-            inspoCollection (where: {
-              slug: $slug
-            }) {
-              items {
-                title
-                description {
-                  json
-                }
-                tags
-                featuredImage {
-                  title
-                  url
-                  width
-                  height
-                }
-              }
-            }
-          }
-        `,
-        variables: {
-          slug: params?.slug,
-        },
-      }),
+const GET_INSPO = gql`
+  query GetInspo($slug: String!) {
+    inspoCollection(where: { slug: $slug }) {
+      items {
+        title
+        description {
+          json
+        }
+        tags
+        featuredImage {
+          title
+          url
+          width
+          height
+        }
+      }
     }
-  );
+  }
+`;
 
-  if (!result.ok) {
-    console.error(result);
+export const getStaticProps = async ({ params }: Params) => {
+  const { data, error } = await client.query({
+    query: GET_INSPO,
+    variables: {
+      slug: params?.slug,
+    },
+  });
+
+  if (error) {
+    console.error(error);
     return {};
   }
 
-  const { data } = await result.json();
   const inspoData: Inspo = data.inspoCollection.items[0] || {};
 
   return {
@@ -144,4 +126,4 @@ const Tag = tw.span`
   py-2 px-5 bg-slate-200 rounded-sm
 `;
 
-const Content = tw.p``;
+const Content = tw.div``;

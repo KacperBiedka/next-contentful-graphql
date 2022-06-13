@@ -25,7 +25,7 @@ export const InspoCard: FC<InspoCardProps> = ({ inspo }) => {
       <Content>
         <Title>{title}</Title>
         <Actions>
-          <Link href={`inspos/${slug}`}>
+          <Link href={`/inspos/${slug}`}>
             <a>Details</a>
           </Link>
         </Actions>

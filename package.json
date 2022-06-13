@@ -12,6 +12,7 @@
     "gen": "graphql-codegen --config codegen.yml --require dotenv/config -e .env.local"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.7",
     "@contentful/rich-text-react-renderer": "^15.12.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",

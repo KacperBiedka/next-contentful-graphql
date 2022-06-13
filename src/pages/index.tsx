@@ -1,46 +1,40 @@
 import type { NextPage } from "next";
 import tw from "twin.macro";
+import { gql } from "@apollo/client";
 
 import { InspoCard } from "components";
 import type { Inspo } from "schema/generated/schema";
 
-export const getStaticProps = async () => {
-  const result = await fetch(
-    `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}/environments/master`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-          query {
-            inspoCollection {
-              items {
-                title
-                slug
-                thumbnail {
-                  title
-                  url
-                }
-                sys {
-                  id
-                }
-              }
-            }
-          }
-        `,
-      }),
-    }
-  );
+import client from "../lib/apolloClient";
 
-  if (!result.ok) {
-    console.error(result);
+const GET_INSPOS = gql`
+  query {
+    inspoCollection {
+      items {
+        title
+        slug
+        thumbnail {
+          title
+          url
+        }
+        sys {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const getStaticProps = async () => {
+  const { data, error } = await client.query({
+    query: GET_INSPOS,
+  });
+
+  if (error) {
+    console.error(error);
     return {};
   }
 
-  const { data } = await result.json();
   const inspos: Array<Inspo> = data.inspoCollection.items;
 
   return {
