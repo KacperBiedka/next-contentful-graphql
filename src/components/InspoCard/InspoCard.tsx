@@ -49,4 +49,4 @@ const Title = tw.h4`
 `;
 
 const Actions = tw.div`
-text-right p-5 underline text-slate-600 hover:text-slate-900`;
+text-left p-5 pt-3 underline text-slate-600 hover:text-lime-600`;
