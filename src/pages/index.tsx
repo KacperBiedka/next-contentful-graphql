@@ -56,7 +56,7 @@ const Home: NextPage<{ inspos: Array<Inspo> }> = ({ inspos }) => {
 };
 
 const Wrapper = tw.div`
-  grid h-full w-full grid-cols-1 gap-10 md:grid-cols-2
+  grid h-full w-full grid-cols-1 gap-9 md:grid-cols-2
 `;
 
 export default Home;
